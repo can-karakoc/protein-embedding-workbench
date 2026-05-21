@@ -9,6 +9,7 @@ import {
   Database,
   Dna,
   Download,
+  FlaskConical,
   Loader2,
   Search,
   Sparkles,
@@ -122,31 +123,44 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<TabKey>("embed");
 
   return (
-    <main className="min-h-screen text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-6 py-10 sm:px-10 lg:px-14">
-        <header className="flex flex-col gap-6 border-b border-hairline pb-10 xl:flex-row xl:items-end xl:justify-between">
-          <div className="flex min-w-0 items-center gap-4">
-            <div className="grid size-11 place-items-center rounded-md bg-ink text-white">
+    <main className="min-h-screen overflow-x-hidden text-foreground">
+      <div className="mx-auto flex min-h-screen w-full max-w-[1480px] flex-col px-4 py-6 sm:px-8 lg:px-10">
+        <div className="mb-4 flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-md border border-hairline bg-surface px-3 py-2 text-xs text-muted shadow-[0_18px_60px_rgba(23,20,18,0.06)] backdrop-blur-xl">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="size-2 rounded-full bg-accent shadow-[0_0_18px_rgba(15,118,110,0.7)]" />
+            <span className="font-mono uppercase text-caption">ESM2 inference</span>
+            <span className="truncate text-ink">biologically meaningful mode</span>
+          </div>
+          <span className="font-mono text-caption">320d pooled embeddings</span>
+        </div>
+
+        <header className="flex flex-col gap-6 rounded-lg border border-hairline bg-surface-strong/85 p-5 shadow-[0_24px_80px_rgba(23,20,18,0.08)] backdrop-blur-xl xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="grid size-12 shrink-0 place-items-center rounded-md border border-hairline-strong bg-ink text-mint shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
               <Dna size={20} strokeWidth={1.75} />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-[0.22em] text-caption">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-caption">
                 Protein Embedding Workbench
               </p>
-              <h1 className="mt-1.5 font-heading text-5xl font-bold tracking-tight text-ink">
+              <h1 className="mt-1.5 text-4xl font-semibold text-ink sm:text-5xl">
                 Semantic protein explorer
               </h1>
+              <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-muted">
+                Inspect UniProt sequences through live ESM2 embeddings, cache state, and vector similarity.
+              </p>
             </div>
           </div>
 
-          <div className="flex shrink-0 flex-wrap items-center justify-start gap-2 xl:justify-end">
-            <StatusPill icon={Activity} label="FastAPI" value={API_BASE} />
-            <StatusPill icon={Sparkles} label="Vector cache" value="visible" />
+          <div className="flex min-w-0 flex-wrap items-center justify-start gap-2 xl:justify-end">
+            <StatusPill icon={Activity} label="API" value={API_BASE} />
+            <StatusPill icon={FlaskConical} label="Model" value="ESM2 t6" />
+            <StatusPill icon={Sparkles} label="Cache" value="SQLite vector store" />
           </div>
         </header>
 
-        <section className="grid flex-1 gap-12 py-10 lg:grid-cols-[200px_minmax(0,1fr)]">
-          <nav className="flex gap-1 overflow-x-auto pb-2 lg:flex-col lg:gap-0 lg:overflow-visible lg:border-r lg:border-hairline lg:pb-0 lg:pr-8">
+        <section className="grid min-w-0 flex-1 gap-6 py-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+          <nav className="flex min-w-0 max-w-full gap-2 overflow-x-auto rounded-lg border border-hairline bg-surface p-2 shadow-[0_18px_60px_rgba(23,20,18,0.05)] backdrop-blur-xl lg:flex-col lg:overflow-visible">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const active = activeTab === tab.key;
@@ -155,20 +169,20 @@ export default function Home() {
                   key={tab.key}
                   type="button"
                   onClick={() => setActiveTab(tab.key)}
-                  className={`relative flex h-10 cursor-pointer items-center gap-2.5 px-4 text-sm font-medium transition lg:h-11 lg:w-full lg:justify-start lg:border-l-2 lg:px-5 ${
+                  className={`relative flex h-10 shrink-0 cursor-pointer items-center gap-2.5 rounded-md border px-4 text-sm font-medium transition lg:h-11 lg:w-full lg:justify-start ${
                     active
-                      ? "text-ink lg:border-accent"
-                      : "text-muted hover:text-ink lg:border-transparent"
+                      ? "border-hairline-strong bg-surface-strong text-ink shadow-[0_10px_30px_rgba(23,20,18,0.07)]"
+                      : "border-transparent text-muted hover:border-hairline hover:bg-surface-strong/70 hover:text-ink"
                   }`}
                 >
-                  <Icon size={15} strokeWidth={1.5} />
+                  <Icon size={15} strokeWidth={1.6} className={active ? "text-accent" : ""} />
                   {tab.label}
                 </button>
               );
             })}
           </nav>
 
-          <div className="min-w-0">
+          <div className="min-w-0 max-w-full">
             {activeTab === "embed" && <EmbedPanel />}
             {activeTab === "compare" && <ComparePanel />}
             {activeTab === "search" && <SearchPanel />}
@@ -217,7 +231,7 @@ function EmbedPanel() {
     >
       <form
         onSubmit={submit}
-        className="grid items-start gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
+        className="grid min-w-0 items-start gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
       >
         <ProteinInput
           mode={mode}
@@ -225,8 +239,8 @@ function EmbedPanel() {
           onModeChange={setMode}
           onValueChange={setValue}
         />
-        <div className="flex flex-col gap-4">
-          <label className="flex h-10 cursor-pointer items-center justify-between rounded-md border border-hairline bg-white px-4 text-sm text-ink">
+        <div className="flex min-w-0 flex-col gap-4">
+          <label className="flex h-11 cursor-pointer items-center justify-between rounded-md border border-hairline bg-surface-strong px-4 text-sm text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
             Return full vector
             <input
               type="checkbox"
@@ -287,7 +301,7 @@ function ComparePanel() {
 
   return (
     <WorkspacePanel icon={ArrowRightLeft} title="Compare">
-      <form onSubmit={submit} className="grid gap-8">
+      <form onSubmit={submit} className="grid min-w-0 gap-8">
         <div className="grid items-start gap-8 lg:grid-cols-2">
           <ProteinInput
             label="Left protein"
@@ -312,16 +326,16 @@ function ComparePanel() {
 
       {result && (
         <section className="mt-10 grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)]">
-          <div className="rounded-md border border-hairline bg-white p-7">
-            <p className="text-xs uppercase tracking-[0.18em] text-caption">
+          <div className="rounded-md border border-hairline bg-surface-strong p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-caption">
               Cosine similarity
             </p>
-            <p className="mt-4 font-heading text-5xl font-bold tracking-tight text-ink">
+            <p className="mt-4 font-mono text-5xl font-semibold text-ink">
               {result.cosine_similarity.toFixed(3)}
             </p>
             <div className="mt-6 h-1.5 overflow-hidden rounded-full bg-track">
               <div
-                className="h-full rounded-full bg-accent transition-[width]"
+                className="h-full rounded-full bg-accent shadow-[0_0_24px_rgba(15,118,110,0.45)] transition-[width]"
                 style={{ width: `${scorePercent}%` }}
               />
             </div>
@@ -331,7 +345,7 @@ function ComparePanel() {
               <ProteinSummary protein={result.left} status={result.left_cache_status} />
               <ProteinSummary protein={result.right} status={result.right_cache_status} />
             </div>
-            <p className="rounded-md border border-hairline bg-white p-5 text-sm text-muted">
+            <p className="rounded-md border border-hairline bg-surface p-5 text-sm leading-6 text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.75)]">
               {result.interpretation}
             </p>
           </div>
@@ -375,7 +389,7 @@ function SearchPanel() {
     >
       <form
         onSubmit={submit}
-        className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px]"
+        className="grid min-w-0 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_280px]"
       >
         <ProteinInput
           mode={mode}
@@ -383,7 +397,7 @@ function SearchPanel() {
           onModeChange={setMode}
           onValueChange={setValue}
         />
-        <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           <label className="grid cursor-pointer gap-2 text-sm text-ink">
             <span className="text-xs uppercase tracking-[0.18em] text-caption">Top K</span>
             <input
@@ -392,7 +406,7 @@ function SearchPanel() {
               max={100}
               value={topK}
               onChange={(event) => setTopK(Number(event.target.value))}
-              className="h-10 rounded-md border border-hairline bg-white px-3 text-base font-normal outline-none transition focus:border-ink"
+              className="h-11 rounded-md border border-hairline bg-surface-strong px-3 font-mono text-sm font-normal text-ink outline-none transition placeholder:text-caption focus:border-accent focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)]"
             />
           </label>
           <PrimaryButton loading={loading} label="Find matches" icon={Search} />
@@ -408,7 +422,7 @@ function SearchPanel() {
             result.matches.map((match, index) => (
               <div
                 key={`${match.accession ?? match.source ?? index}-${index}`}
-                className="grid gap-4 rounded-md border border-hairline bg-white p-5 transition hover:border-hairline-strong md:grid-cols-[48px_minmax(0,1fr)_120px] md:items-center"
+                className="grid gap-4 rounded-md border border-hairline bg-surface-strong p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] transition hover:border-hairline-strong hover:shadow-[0_14px_45px_rgba(23,20,18,0.08)] md:grid-cols-[48px_minmax(0,1fr)_120px] md:items-center"
               >
                 <p className="font-mono text-sm text-muted">{String(index + 1).padStart(2, "0")}</p>
                 <div className="min-w-0">
@@ -422,7 +436,7 @@ function SearchPanel() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs uppercase tracking-[0.18em] text-caption">Score</p>
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-caption">Score</p>
                   <p className="mt-1 font-mono text-2xl font-bold text-ink">
                     {match.similarity.toFixed(3)}
                   </p>
@@ -480,11 +494,13 @@ function WorkspacePanel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-lg border border-hairline bg-white p-10 sm:p-14">
+    <section className="max-w-full rounded-lg border border-hairline bg-surface/90 p-6 shadow-[0_24px_90px_rgba(23,20,18,0.08)] backdrop-blur-xl sm:p-10 lg:p-12">
       <div className="mb-12 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Icon size={18} strokeWidth={1.5} className="text-accent" />
-          <h2 className="font-heading text-3xl font-bold tracking-tight text-ink">
+          <span className="grid size-9 place-items-center rounded-md border border-hairline bg-surface-strong text-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+            <Icon size={17} strokeWidth={1.6} />
+          </span>
+          <h2 className="text-2xl font-semibold text-ink sm:text-3xl">
             {title}
           </h2>
         </div>
@@ -509,18 +525,18 @@ function ProteinInput({
   onValueChange: (value: string) => void;
 }) {
   return (
-    <div className="grid gap-3">
-      <span className="text-xs uppercase tracking-[0.18em] text-caption">{label}</span>
-      <div className="inline-flex h-9 self-start overflow-hidden rounded-md border border-hairline">
+    <div className="grid min-w-0 gap-3">
+      <span className="font-mono text-xs uppercase tracking-[0.18em] text-caption">{label}</span>
+      <div className="inline-flex h-10 w-full max-w-full self-start overflow-hidden rounded-md border border-hairline bg-panel p-1 sm:w-auto">
         {(["accession", "sequence"] as const).map((option) => (
           <button
             key={option}
             type="button"
             onClick={() => onModeChange(option)}
-            className={`cursor-pointer px-4 text-sm capitalize transition ${
+            className={`cursor-pointer rounded-sm px-4 text-sm capitalize transition ${
               mode === option
-                ? "bg-ink text-white"
-                : "bg-white text-muted hover:text-ink"
+                ? "bg-surface-strong text-ink shadow-[0_6px_18px_rgba(23,20,18,0.08)]"
+                : "text-muted hover:text-ink"
             }`}
           >
             {option}
@@ -531,14 +547,14 @@ function ProteinInput({
         <input
           value={value}
           onChange={(event) => onValueChange(event.target.value)}
-          className="h-10 rounded-md border border-hairline bg-white px-3 text-base font-normal outline-none transition focus:border-ink"
+          className="h-11 rounded-md border border-hairline bg-surface-strong px-3 font-mono text-sm font-normal text-ink outline-none transition placeholder:text-caption focus:border-accent focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)]"
           placeholder="P69905"
         />
       ) : (
         <textarea
           value={value}
           onChange={(event) => onValueChange(event.target.value)}
-          className="min-h-44 resize-y rounded-md border border-hairline bg-white p-3 font-mono text-sm outline-none transition focus:border-ink"
+          className="min-h-44 resize-y rounded-md border border-hairline bg-surface-strong p-3 font-mono text-sm leading-6 text-ink outline-none transition placeholder:text-caption focus:border-accent focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)]"
           placeholder="MVLSPADKTNVKAA..."
         />
       )}
@@ -591,13 +607,13 @@ function EmbeddingResult({ result }: { result: EmbeddingResponse }) {
         <Metric label="Dimensions" value={result.embedding_dim} />
         <Metric label="Backend" value={result.backend} />
       </div>
-      <div className="rounded-md border border-hairline bg-white p-5">
-        <p className="mb-4 text-xs uppercase tracking-[0.18em] text-caption">Preview</p>
+      <div className="rounded-md border border-hairline bg-surface-strong p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+        <p className="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-caption">Preview</p>
         <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
           {result.embedding_preview.map((value, index) => (
             <div
               key={`${value}-${index}`}
-              className="rounded-sm border border-hairline bg-white px-2 py-3 text-center font-mono text-xs text-ink"
+              className="rounded-sm border border-hairline bg-panel px-2 py-3 text-center font-mono text-xs text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.75)]"
             >
               {value.toFixed(3)}
             </div>
@@ -605,9 +621,9 @@ function EmbeddingResult({ result }: { result: EmbeddingResponse }) {
         </div>
       </div>
       {fullVector && (
-        <div className="rounded-md border border-hairline bg-white p-5">
+        <div className="rounded-md border border-hairline bg-surface-strong p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs uppercase tracking-[0.18em] text-caption">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-caption">
               Full vector
             </p>
             <div className="flex flex-wrap items-center gap-2">
@@ -617,7 +633,7 @@ function EmbeddingResult({ result }: { result: EmbeddingResponse }) {
               <button
                 type="button"
                 onClick={copyFullVector}
-                className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-md border border-hairline bg-white px-3 text-xs text-ink transition hover:-translate-y-px hover:shadow-soft"
+                className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-md border border-hairline bg-surface-strong px-3 text-xs text-ink transition hover:border-hairline-strong hover:shadow-[0_10px_24px_rgba(23,20,18,0.08)]"
               >
                 {copied ? <Check size={13} /> : <Copy size={13} />}
                 {copied ? "Copied" : "Copy"}
@@ -625,7 +641,7 @@ function EmbeddingResult({ result }: { result: EmbeddingResponse }) {
               <button
                 type="button"
                 onClick={downloadFullVector}
-                className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-md border border-hairline bg-white px-3 text-xs text-ink transition hover:-translate-y-px hover:shadow-soft"
+                className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-md border border-hairline bg-surface-strong px-3 text-xs text-ink transition hover:border-hairline-strong hover:shadow-[0_10px_24px_rgba(23,20,18,0.08)]"
               >
                 <Download size={13} />
                 Download JSON
@@ -635,7 +651,7 @@ function EmbeddingResult({ result }: { result: EmbeddingResponse }) {
           <textarea
             readOnly
             value={JSON.stringify(fullVector)}
-            className="h-44 w-full resize-y rounded-md border border-hairline bg-[#F8F8F4] p-3 font-mono text-xs leading-5 text-ink outline-none"
+            className="h-44 w-full resize-y rounded-md border border-hairline bg-panel p-3 font-mono text-xs leading-5 text-ink outline-none"
           />
         </div>
       )}
@@ -651,7 +667,7 @@ function ProteinSummary({
   status: string;
 }) {
   return (
-    <div className="rounded-md border border-hairline bg-white p-5">
+    <div className="rounded-md border border-hairline bg-surface-strong p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="truncate text-sm text-ink">{protein.accession ?? protein.source}</p>
         <CacheBadge status={status} />
@@ -668,9 +684,9 @@ function ProteinSummary({
 
 function Metric({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-md border border-hairline bg-white p-6">
-      <p className="text-xs uppercase tracking-[0.18em] text-caption">{label}</p>
-      <p className="mt-4 truncate font-heading text-4xl font-medium tracking-tight text-ink">
+    <div className="rounded-md border border-hairline bg-surface-strong p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+      <p className="font-mono text-xs uppercase tracking-[0.18em] text-caption">{label}</p>
+      <p className="mt-4 truncate font-mono text-3xl font-semibold text-ink">
         {value}
       </p>
     </div>
@@ -682,8 +698,8 @@ function CacheBadge({ status }: { status?: string }) {
 
   const hit = status === "hit";
   return (
-    <span className="inline-flex h-6 items-center gap-2 rounded-full border border-hairline bg-white px-3 text-[10px] uppercase tracking-[0.16em] text-muted">
-      <span className={`size-1.5 rounded-full ${hit ? "bg-accent" : "bg-caption"}`} />
+    <span className="inline-flex h-6 items-center gap-2 rounded-full border border-hairline bg-surface-strong px-3 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+      <span className={`size-1.5 rounded-full ${hit ? "bg-accent shadow-[0_0_12px_rgba(15,118,110,0.65)]" : "bg-copper"}`} />
       {status}
     </span>
   );
@@ -699,9 +715,9 @@ function StatusPill({
   value: string;
 }) {
   return (
-    <div className="inline-flex h-8 max-w-full items-center gap-2 rounded-full border border-hairline bg-white px-3 text-xs">
-      <Icon size={13} strokeWidth={1.5} className="shrink-0 text-caption" />
-      <span className="text-caption">{label}</span>
+    <div className="inline-flex h-8 min-w-0 max-w-full items-center gap-2 rounded-full border border-hairline bg-surface px-3 text-xs shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+      <Icon size={13} strokeWidth={1.6} className="shrink-0 text-accent" />
+      <span className="shrink-0 font-mono uppercase text-caption">{label}</span>
       <span className="truncate text-ink">{value}</span>
     </div>
   );
@@ -723,7 +739,7 @@ function PrimaryButton({
       type={onClick ? "button" : "submit"}
       onClick={onClick}
       disabled={loading}
-      className="inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-ink px-5 text-sm font-medium text-white transition hover:bg-ink-hover disabled:cursor-not-allowed disabled:opacity-50"
+      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-accent bg-accent px-5 text-sm font-medium text-white shadow-[0_12px_35px_rgba(15,118,110,0.2)] transition hover:border-accent-hover hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
     >
       {loading ? <Loader2 size={15} className="animate-spin" /> : <Icon size={15} strokeWidth={1.5} />}
       {label}
@@ -735,7 +751,7 @@ function ErrorMessage({ message }: { message: string | null }) {
   if (!message) return null;
 
   return (
-    <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+    <p className="rounded-md border border-red-200 bg-red-50/90 p-3 text-sm text-red-700">
       {message}
     </p>
   );
@@ -743,7 +759,7 @@ function ErrorMessage({ message }: { message: string | null }) {
 
 function EmptyState() {
   return (
-    <div className="grid min-h-48 place-items-center rounded-md border border-dashed border-hairline-strong bg-white p-8 text-center">
+    <div className="grid min-h-48 place-items-center rounded-md border border-dashed border-hairline-strong bg-surface p-8 text-center">
       <div>
         <Database className="mx-auto text-caption" size={20} strokeWidth={1.5} />
         <p className="mt-3 text-sm text-muted">No cached neighbors yet</p>
