@@ -101,22 +101,23 @@ EMBEDDING_BACKEND=esm python scripts/seed_esm_cache.py
 Live deployment:
 
 - Frontend: https://frontend-five-dusky-60.vercel.app
-- Backend API: https://backend-ochre-five-13.vercel.app
-- API health: https://backend-ochre-five-13.vercel.app/health
-- API docs: https://backend-ochre-five-13.vercel.app/docs
+- Biologically meaningful ESM backend: https://cankarakoc-protein-embedding-workbench-api.hf.space
+- API health: https://cankarakoc-protein-embedding-workbench-api.hf.space/health
+- API docs: https://cankarakoc-protein-embedding-workbench-api.hf.space/docs
+- Lightweight hash backend: https://backend-ochre-five-13.vercel.app
 
 Recommended public demo:
 
 - Frontend: Vercel Hobby, deployed from `frontend/`.
-- Backend: Vercel FastAPI function or Render free web service, deployed from `backend/`.
-- Backend mode: `EMBEDDING_BACKEND=hash`.
+- Backend: Hugging Face Docker Space, deployed from `backend/`.
+- Backend mode: `EMBEDDING_BACKEND=esm`.
 - Cache: ephemeral SQLite at `/tmp/protein-cache/embedding_cache.sqlite`.
 
-ML-friendly alternative:
+Lightweight fallback:
 
 - Frontend: Vercel.
-- Backend: Hugging Face Spaces Docker.
-- Backend mode: `EMBEDDING_BACKEND=esm` when CPU/RAM limits allow it.
+- Backend: Vercel FastAPI function.
+- Backend mode: `EMBEDDING_BACKEND=hash`.
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for step-by-step deployment notes.
 

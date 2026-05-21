@@ -16,12 +16,13 @@ The key design choice is to keep Python inference out of Vercel serverless funct
 
 ```txt
 Frontend: https://frontend-five-dusky-60.vercel.app
-Backend:  https://backend-ochre-five-13.vercel.app
-Health:   https://backend-ochre-five-13.vercel.app/health
-Docs:     https://backend-ochre-five-13.vercel.app/docs
+ESM API:  https://cankarakoc-protein-embedding-workbench-api.hf.space
+Health:   https://cankarakoc-protein-embedding-workbench-api.hf.space/health
+Docs:     https://cankarakoc-protein-embedding-workbench-api.hf.space/docs
+Hash API: https://backend-ochre-five-13.vercel.app
 ```
 
-The current backend uses `EMBEDDING_BACKEND=hash`, so similarity scores demonstrate product flow and API behavior, not biological meaning.
+The current frontend points at the Hugging Face backend with `EMBEDDING_BACKEND=esm`, so embeddings and similarity scores are based on ESM2 protein language model representations. The Vercel FastAPI backend remains available as a lightweight `hash` fallback.
 
 ## Option A: Vercel Frontend + Vercel FastAPI Backend
 
