@@ -124,8 +124,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-x-hidden text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-[1480px] flex-col px-4 py-6 sm:px-8 lg:px-10">
-        <div className="mb-4 flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-md border border-hairline bg-surface px-3 py-2 text-xs text-muted shadow-[0_18px_60px_rgba(23,20,18,0.06)] backdrop-blur-xl">
+      <div className="mx-auto flex min-h-screen w-[calc(100vw-3rem)] max-w-[1480px] flex-col py-6 sm:w-[calc(100vw-4rem)] lg:w-[calc(100vw-5rem)]">
+        <div className="mb-4 flex min-w-0 max-w-full flex-wrap items-center justify-between gap-3 rounded-md border border-hairline bg-surface px-3 py-2 text-xs text-muted shadow-[0_18px_60px_rgba(23,20,18,0.06)] backdrop-blur-xl">
           <div className="flex min-w-0 items-center gap-2">
             <span className="size-2 rounded-full bg-accent shadow-[0_0_18px_rgba(15,118,110,0.7)]" />
             <span className="font-mono uppercase text-caption">ESM2 inference</span>
@@ -134,7 +134,7 @@ export default function Home() {
           <span className="font-mono text-caption">320d pooled embeddings</span>
         </div>
 
-        <header className="flex flex-col gap-6 rounded-lg border border-hairline bg-surface-strong/85 p-5 shadow-[0_24px_80px_rgba(23,20,18,0.08)] backdrop-blur-xl xl:flex-row xl:items-end xl:justify-between">
+        <header className="grid max-w-full gap-6 overflow-hidden rounded-lg border border-hairline bg-surface-strong/85 p-5 shadow-[0_24px_80px_rgba(23,20,18,0.08)] backdrop-blur-xl xl:grid-cols-[minmax(0,1fr)_auto] xl:items-end">
           <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
             <div className="grid size-12 shrink-0 place-items-center rounded-md border border-hairline-strong bg-ink text-mint shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
               <Dna size={20} strokeWidth={1.75} />
@@ -143,16 +143,16 @@ export default function Home() {
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-caption">
                 Protein Embedding Workbench
               </p>
-              <h1 className="mt-1.5 text-4xl font-semibold text-ink sm:text-5xl">
+              <h1 className="mt-2 font-heading text-[2.55rem] font-medium leading-[0.95] text-ink sm:text-6xl xl:whitespace-nowrap xl:text-[4.35rem]">
                 Semantic protein explorer
               </h1>
-              <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-muted">
+              <p className="mt-2 max-w-[18rem] text-pretty text-sm leading-6 text-muted sm:max-w-2xl">
                 Inspect UniProt sequences through live ESM2 embeddings, cache state, and vector similarity.
               </p>
             </div>
           </div>
 
-          <div className="flex min-w-0 flex-wrap items-center justify-start gap-2 xl:justify-end">
+          <div className="flex min-w-0 max-w-full flex-wrap items-center justify-start gap-2 xl:max-w-[760px] xl:justify-end">
             <StatusPill icon={Activity} label="API" value={API_BASE} />
             <StatusPill icon={FlaskConical} label="Model" value="ESM2 t6" />
             <StatusPill icon={Sparkles} label="Cache" value="SQLite vector store" />
@@ -500,7 +500,7 @@ function WorkspacePanel({
           <span className="grid size-9 place-items-center rounded-md border border-hairline bg-surface-strong text-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
             <Icon size={17} strokeWidth={1.6} />
           </span>
-          <h2 className="text-2xl font-semibold text-ink sm:text-3xl">
+          <h2 className="font-heading text-3xl font-medium leading-none text-ink sm:text-4xl">
             {title}
           </h2>
         </div>
@@ -547,14 +547,14 @@ function ProteinInput({
         <input
           value={value}
           onChange={(event) => onValueChange(event.target.value)}
-          className="h-11 rounded-md border border-hairline bg-surface-strong px-3 font-mono text-sm font-normal text-ink outline-none transition placeholder:text-caption focus:border-accent focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)]"
+          className="h-11 w-full min-w-0 rounded-md border border-hairline bg-surface-strong px-3 font-mono text-sm font-normal text-ink outline-none transition placeholder:text-caption focus:border-accent focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)]"
           placeholder="P69905"
         />
       ) : (
         <textarea
           value={value}
           onChange={(event) => onValueChange(event.target.value)}
-          className="min-h-44 resize-y rounded-md border border-hairline bg-surface-strong p-3 font-mono text-sm leading-6 text-ink outline-none transition placeholder:text-caption focus:border-accent focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)]"
+          className="min-h-44 w-full min-w-0 resize-y rounded-md border border-hairline bg-surface-strong p-3 font-mono text-sm leading-6 text-ink outline-none transition placeholder:text-caption focus:border-accent focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)]"
           placeholder="MVLSPADKTNVKAA..."
         />
       )}
@@ -715,7 +715,7 @@ function StatusPill({
   value: string;
 }) {
   return (
-    <div className="inline-flex h-8 min-w-0 max-w-full items-center gap-2 rounded-full border border-hairline bg-surface px-3 text-xs shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+    <div className="inline-flex h-8 min-w-0 max-w-full items-center gap-2 rounded-full border border-hairline bg-surface px-3 text-xs shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:max-w-[520px]">
       <Icon size={13} strokeWidth={1.6} className="shrink-0 text-accent" />
       <span className="shrink-0 font-mono uppercase text-caption">{label}</span>
       <span className="truncate text-ink">{value}</span>
