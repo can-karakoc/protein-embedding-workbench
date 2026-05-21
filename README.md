@@ -91,10 +91,17 @@ The default ESM model is `facebook/esm2_t6_8M_UR50D`. Local ESM mode currently l
 
 ## Free Hosting Plan
 
+Live deployment:
+
+- Frontend: https://frontend-five-dusky-60.vercel.app
+- Backend API: https://backend-ochre-five-13.vercel.app
+- API health: https://backend-ochre-five-13.vercel.app/health
+- API docs: https://backend-ochre-five-13.vercel.app/docs
+
 Recommended public demo:
 
 - Frontend: Vercel Hobby, deployed from `frontend/`.
-- Backend: Render free web service, deployed from `backend/`.
+- Backend: Vercel FastAPI function or Render free web service, deployed from `backend/`.
 - Backend mode: `EMBEDDING_BACKEND=hash`.
 - Cache: ephemeral SQLite at `/tmp/protein-cache/embedding_cache.sqlite`.
 

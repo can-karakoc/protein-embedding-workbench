@@ -4,7 +4,7 @@
 
 ```txt
 Frontend: Vercel Hobby, Next.js from frontend/
-Backend: Render free web service from backend/
+Backend: Vercel FastAPI function or Render free web service from backend/
 ML mode: hash backend for public demo
 Cache: SQLite file in /tmp, accepted as ephemeral on free hosting
 Real embeddings: Hugging Face Spaces or a paid/larger backend later
@@ -12,9 +12,52 @@ Real embeddings: Hugging Face Spaces or a paid/larger backend later
 
 The key design choice is to keep Python inference out of Vercel serverless functions. Vercel hosts the interface; the FastAPI service handles UniProt calls, embeddings, caching, and similarity search.
 
-## Option A: Vercel + Render Free
+## Current Deployment
 
-Use this for the first public demo.
+```txt
+Frontend: https://frontend-five-dusky-60.vercel.app
+Backend:  https://backend-ochre-five-13.vercel.app
+Health:   https://backend-ochre-five-13.vercel.app/health
+Docs:     https://backend-ochre-five-13.vercel.app/docs
+```
+
+The current backend uses `EMBEDDING_BACKEND=hash`, so similarity scores demonstrate product flow and API behavior, not biological meaning.
+
+## Option A: Vercel Frontend + Vercel FastAPI Backend
+
+This is the fastest no-extra-account free deployment path.
+
+Deploy backend from `backend/`:
+
+```bash
+vercel deploy --prod --yes \
+  --env APP_NAME="Protein Embedding Workbench API" \
+  --env ENV=production \
+  --env EMBEDDING_BACKEND=hash \
+  --env EMBEDDING_MODEL_NAME=facebook/esm2_t6_8M_UR50D \
+  --env CACHE_DIR=/tmp/protein-cache \
+  --env EMBEDDING_CACHE_PATH=/tmp/protein-cache/embedding_cache.sqlite \
+  --env ENABLE_EMBEDDING_CACHE=true \
+  --env CORS_ORIGINS='["https://your-frontend.vercel.app"]'
+```
+
+Deploy frontend from `frontend/`:
+
+```bash
+vercel deploy --prod --yes \
+  --build-env NEXT_PUBLIC_API_BASE_URL=https://your-backend.vercel.app \
+  --env NEXT_PUBLIC_API_BASE_URL=https://your-backend.vercel.app
+```
+
+Notes:
+
+- Vercel reads `backend/pyproject.toml` to locate `app.main:app` and install lightweight dependencies.
+- Do not use this path for heavyweight ESM inference.
+- `/tmp` storage is ephemeral.
+
+## Option B: Vercel + Render Free
+
+Use this if you want the Python API on a separate backend host.
 
 ### Backend on Render
 
@@ -60,7 +103,7 @@ NEXT_PUBLIC_API_BASE_URL=https://your-render-service.onrender.com
 
 After deployment, update backend `CORS_ORIGINS` to include the final Vercel production URL.
 
-## Option B: Vercel + Hugging Face Spaces
+## Option C: Vercel + Hugging Face Spaces
 
 Use this when the demo needs biologically meaningful ESM embeddings.
 
@@ -90,7 +133,7 @@ Notes:
 - Keep sequence-length limits visible in the UI/API.
 - If ESM inference becomes central, add a background worker and persistent database.
 
-## Option C: Low-Cost Production Upgrade
+## Option D: Low-Cost Production Upgrade
 
 When the demo grows beyond free-tier limits:
 
