@@ -89,6 +89,13 @@ EMBEDDING_BACKEND=esm uvicorn app.main:app --reload
 
 The default ESM model is `facebook/esm2_t6_8M_UR50D`. Local ESM mode currently limits sequences to 1022 amino acids.
 
+To seed a small ESM cache for similarity search:
+
+```bash
+cd backend
+EMBEDDING_BACKEND=esm python scripts/seed_esm_cache.py
+```
+
 ## Free Hosting Plan
 
 Live deployment:

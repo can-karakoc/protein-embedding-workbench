@@ -107,7 +107,29 @@ After deployment, update backend `CORS_ORIGINS` to include the final Vercel prod
 
 Use this when the demo needs biologically meaningful ESM embeddings.
 
-Backend setup:
+Hugging Face Docker Spaces use the `sdk: docker` README metadata and expose the app on `app_port`, commonly `7860`. The backend includes `Dockerfile.hf` and `README.hf.md` for this path.
+
+### Create the Space
+
+1. Create a new Hugging Face Space.
+2. Choose Docker as the SDK.
+3. Put the contents of `backend/` at the root of the Space repository.
+4. Rename `Dockerfile.hf` to `Dockerfile`.
+5. Rename `README.hf.md` to `README.md`.
+
+Required Space secrets/environment variables:
+
+```txt
+ENV=production
+CORS_ORIGINS=["https://frontend-five-dusky-60.vercel.app"]
+CACHE_DIR=/data/protein-cache
+EMBEDDING_CACHE_PATH=/data/protein-cache/embedding_cache.sqlite
+EMBEDDING_BACKEND=esm
+EMBEDDING_MODEL_NAME=facebook/esm2_t6_8M_UR50D
+ENABLE_EMBEDDING_CACHE=true
+```
+
+Local backend setup:
 
 ```bash
 cd backend
@@ -115,21 +137,26 @@ pip install -r requirements-ml.txt
 EMBEDDING_BACKEND=esm uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Recommended environment variables:
+Seed a curated ESM cache before demos:
 
-```txt
-ENV=production
-CORS_ORIGINS=["https://your-vercel-app.vercel.app"]
-CACHE_DIR=/tmp/protein-cache
-EMBEDDING_CACHE_PATH=/tmp/protein-cache/embedding_cache.sqlite
-EMBEDDING_BACKEND=esm
-EMBEDDING_MODEL_NAME=facebook/esm2_t6_8M_UR50D
-ENABLE_EMBEDDING_CACHE=true
+```bash
+cd backend
+EMBEDDING_BACKEND=esm python scripts/seed_esm_cache.py
+```
+
+Point the Vercel frontend at the Space:
+
+```bash
+cd frontend
+vercel deploy --prod --yes \
+  --build-env NEXT_PUBLIC_API_BASE_URL=https://your-space.hf.space \
+  --env NEXT_PUBLIC_API_BASE_URL=https://your-space.hf.space
 ```
 
 Notes:
 
 - Free CPU Spaces can sleep and may be slow for first model load.
+- The first ESM request downloads and loads the model, so expect a slow cold start.
 - Keep sequence-length limits visible in the UI/API.
 - If ESM inference becomes central, add a background worker and persistent database.
 

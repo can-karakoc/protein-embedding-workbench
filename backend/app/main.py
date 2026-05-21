@@ -20,7 +20,13 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": settings.app_name, "embedding_backend": settings.embedding_backend}
+    return {
+        "status": "ok",
+        "service": settings.app_name,
+        "embedding_backend": settings.embedding_backend,
+        "embedding_model_name": settings.embedding_model_name,
+        "is_biologically_meaningful": settings.embedding_backend != "hash",
+    }
 
 app.include_router(proteins_router, prefix="/api/proteins", tags=["proteins"])
 app.include_router(embeddings_router, prefix="/api/embeddings", tags=["embeddings"])
