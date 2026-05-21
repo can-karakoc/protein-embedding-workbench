@@ -14,3 +14,4 @@ data/cache/*
 *.db
 node_modules/
 .next/
+.vercel/
