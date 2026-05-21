@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: protein-embedding-workbench-api
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: EMBEDDING_BACKEND
+        value: hash
+      - key: CACHE_DIR
+        value: /tmp/protein-cache
+      - key: EMBEDDING_CACHE_PATH
+        value: /tmp/protein-cache/embedding_cache.sqlite
+      - key: ENABLE_EMBEDDING_CACHE
+        value: true
+      - key: CORS_ORIGINS
+        value: '["https://your-vercel-app.vercel.app"]'

@@ -1,0 +1,16 @@
+.claude/
+.git.frontend-backup/
+.venv/
+__pycache__/
+.pytest_cache/
+docs/superpowers/
+frontend/src/app/globals 2.css
+.env
+.DS_Store
+data/cache/*
+!data/cache/.gitkeep
+*.sqlite3
+*.sqlite
+*.db
+node_modules/
+.next/

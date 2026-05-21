@@ -1,0 +1,11 @@
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - EMBEDDING_BACKEND=hash
+      - CACHE_DIR=/app/cache
+      - EMBEDDING_CACHE_PATH=/app/cache/embedding_cache.sqlite
+    volumes:
+      - ./data/cache:/app/cache

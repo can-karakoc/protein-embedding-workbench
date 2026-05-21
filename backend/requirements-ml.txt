@@ -1,0 +1,7 @@
+-r requirements.txt
+
+# Optional dependencies for biologically meaningful ESM embeddings and FAISS search.
+# Keep these out of the free Render deploy unless the host has enough memory/CPU.
+torch
+transformers
+faiss-cpu
