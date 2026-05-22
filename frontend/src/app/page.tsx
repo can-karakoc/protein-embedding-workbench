@@ -125,7 +125,7 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden text-foreground">
       <div className="mx-auto flex min-h-screen w-[calc(100vw-3rem)] max-w-[1480px] flex-col py-6 sm:w-[calc(100vw-4rem)] lg:w-[calc(100vw-5rem)]">
-        <div className="mb-4 flex min-w-0 max-w-full flex-wrap items-center justify-between gap-3 rounded-md border border-hairline bg-surface px-3 py-2 text-xs text-muted shadow-[0_18px_60px_rgba(23,20,18,0.06)] backdrop-blur-xl sm:pl-[5.375rem]">
+        <div className="mb-4 flex min-w-0 max-w-full flex-wrap items-center justify-between gap-3 rounded-md border border-hairline bg-surface px-3 py-2 text-xs text-muted shadow-[0_18px_60px_rgba(23,20,18,0.06)] backdrop-blur-xl sm:pl-[3.875rem]">
           <div className="flex min-w-0 items-center gap-2">
             <span className="size-2 rounded-full bg-accent shadow-[0_0_18px_rgba(15,118,110,0.7)]" />
             <span className="font-mono uppercase text-caption">ESM2 inference</span>
@@ -239,7 +239,10 @@ function EmbedPanel() {
           onModeChange={setMode}
           onValueChange={setValue}
         />
-        <div className="flex min-w-0 flex-col gap-4">
+        <div className="grid min-w-0 gap-3">
+          <span className="hidden font-mono text-xs uppercase tracking-[0.18em] text-caption opacity-0 lg:block">
+            Controls
+          </span>
           <label className="flex h-11 cursor-pointer items-center justify-between rounded-md border border-hairline bg-surface-strong px-4 text-sm text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
             Return full vector
             <input
@@ -262,7 +265,9 @@ function EmbedPanel() {
             />
           </label>
           <PrimaryButton loading={loading} label="Generate embedding" icon={Binary} />
-          <ErrorMessage message={error} />
+          <div className="mt-1">
+            <ErrorMessage message={error} />
+          </div>
           {result && <EmbeddingResult result={result} />}
         </div>
       </form>
